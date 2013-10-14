@@ -1,0 +1,13 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\tosmtosqlite.o
+./release\tosmwidget.o
+./release\tstat.o
+./release\tmouseman.o
+./release\troutedijkstra.o
+./release\routingprofiles.o
+./release\moc_mainwindow.o
+./release\moc_tosmwidget.o
+./release\moc_tmouseman.o
+);
