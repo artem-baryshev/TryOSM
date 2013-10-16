@@ -26,6 +26,8 @@ public:
 private slots:
     void on_horizontalSlider_actionTriggered(int action);
 
+    void on_checkBox_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

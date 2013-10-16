@@ -28,6 +28,9 @@ local.properties
 # PDT-specific
 .buildpath
 
+#Qt Debug/Release files
+*.Debug
+*.Release
 
 #################
 ## Visual Studio

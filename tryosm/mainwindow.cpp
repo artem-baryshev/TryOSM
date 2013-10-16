@@ -43,3 +43,8 @@ void MainWindow::on_horizontalSlider_actionTriggered(int action)
     osm->drawProp = (double)ui->horizontalSlider->value() / 100.0;
     osm->update();
 }
+
+void MainWindow::on_checkBox_clicked()
+{
+    osm->useMetric = ui->checkBox->isChecked();
+}

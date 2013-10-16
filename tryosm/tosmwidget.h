@@ -80,7 +80,7 @@ public:
     struct TNNode
     {
 //        long usage;
-        double lat, lon;
+        double lat, lon, metrica;
 //        double attr, usefullness, matter;
         TIDs ownedBy;
 //        double orthodrom(TNNode &nd);
@@ -205,6 +205,7 @@ public:
 //    QList <TID> * findPathBrute_sub(TID nodeFrom, QSet<TID> nodesTo, QList <TID> *curPath = NULL, QSet <TID> *curPathNodes = NULL);
 //    TIDs getNeighbours(TID node);
 public:
+    bool useMetric;
     struct TRoute
     {
         QList <TID> nodes;

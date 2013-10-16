@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Fri 23. Aug 13:55:57 2013
+** Created: Wed 16. Oct 11:25:58 2013
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -14,6 +14,7 @@
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
+#include <QtGui/QCheckBox>
 #include <QtGui/QGridLayout>
 #include <QtGui/QHeaderView>
 #include <QtGui/QMainWindow>
@@ -33,6 +34,7 @@ public:
     QGridLayout *gridLayout;
     QVBoxLayout *verticalLayout;
     QSlider *horizontalSlider;
+    QCheckBox *checkBox;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -53,7 +55,7 @@ public:
         verticalLayout->setSpacing(6);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
 
-        gridLayout->addLayout(verticalLayout, 1, 0, 1, 1);
+        gridLayout->addLayout(verticalLayout, 2, 0, 1, 1);
 
         horizontalSlider = new QSlider(centralWidget);
         horizontalSlider->setObjectName(QString::fromUtf8("horizontalSlider"));
@@ -62,6 +64,11 @@ public:
         horizontalSlider->setOrientation(Qt::Horizontal);
 
         gridLayout->addWidget(horizontalSlider, 0, 0, 1, 1);
+
+        checkBox = new QCheckBox(centralWidget);
+        checkBox->setObjectName(QString::fromUtf8("checkBox"));
+
+        gridLayout->addWidget(checkBox, 1, 0, 1, 1);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -86,6 +93,7 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0, QApplication::UnicodeUTF8));
+        checkBox->setText(QApplication::translate("MainWindow", "\320\230\321\201\320\277\320\276\320\273\321\214\320\267\320\276\320\262\320\260\321\202\321\214 \320\274\320\265\321\202\321\200\320\270\320\272\321\203", 0, QApplication::UnicodeUTF8));
         toolBar->setWindowTitle(QApplication::translate("MainWindow", "toolBar", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 

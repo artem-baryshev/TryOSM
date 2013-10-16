@@ -46,7 +46,8 @@ TRouteDijkstra::TKnotNeighbour::TKnotNeighbour(TID node, TID Way)
 void TRouteDijkstra::initSearch(TID nodeId,
                                 TRouteProfile &profile,
                                 TDistanceMap &distances,
-                                TSortedDistances &D)
+                                TSortedDistances &D,
+                                TID dest)
 {
     for (TIDs::Iterator it = knots.begin(); it != knots.end(); it++)
     {
@@ -54,7 +55,7 @@ void TRouteDijkstra::initSearch(TID nodeId,
     }
     if (owner->nnodes[nodeId].isKnot())
     {
-        D.insert(make_pair(0.0, nodeId));
+        D.insert(make_pair(0.0 + ((dest != BAD_TID) ? owner->distance(nodeId, dest) : 0.0), nodeId));
         distances.insert(nodeId, 0.0);
     }
     else
@@ -72,7 +73,7 @@ void TRouteDijkstra::initSearch(TID nodeId,
         {
 //            TWeight w = profile.getWayWeight(way, nodeId, knotNear);
             TWeight w = profile.getWayWeight(way, nodeId, knotNear);
-            D.insert(make_pair(w, knotNear));
+            D.insert(make_pair(w + ((dest != BAD_TID) ? owner->distance(knotNear, dest) : 0.0), knotNear));
             distances.insert(knotNear, w);
         }
         knotNear = BAD_TID;
@@ -88,7 +89,7 @@ void TRouteDijkstra::initSearch(TID nodeId,
         if (knotNear != BAD_TID)
         {
             TWeight w = profile.getWayWeight(way, nodeId, knotNear);
-            D.insert(make_pair(w, knotNear));
+            D.insert(make_pair(w + ((dest != BAD_TID) ? owner->distance(knotNear, dest) : 0.0), knotNear));
             distances.insert(knotNear, w);
         }
     }
@@ -101,7 +102,7 @@ TRouteDijkstra::TID TRouteDijkstra::getNextKnot(TSortedDistances &D, TIDs &U)
     {
         v = BAD_TID;
         D.erase(D.begin());
-        if (D.size() == 0) break;
+        if (D.empty()) break;
         v = (*D.begin()).second;
     }
     if (v == BAD_TID) return v;
@@ -111,7 +112,7 @@ TRouteDijkstra::TID TRouteDijkstra::getNextKnot(TSortedDistances &D, TIDs &U)
     return v;
 }
 
-void TRouteDijkstra::updateDistances(TID node, TDistanceMap &distances, TSortedDistances &D, TOSMWidget::TRouteProfile &profile, bool reverce)
+void TRouteDijkstra::updateDistances(TID node, TDistanceMap &distances, TSortedDistances &D, TOSMWidget::TRouteProfile &profile, bool reverce, TID dest, TID source)
 {
     if (knotsNear.contains(node))
     {
@@ -126,7 +127,21 @@ void TRouteDijkstra::updateDistances(TID node, TDistanceMap &distances, TSortedD
 //            qDebug() << "dist from node " << w;
             distances[u] = std::min(distances[u], distances[node] + w);
 //            qDebug() << "new dist " << distances[u];
-            D.insert(std::make_pair(distances[u], u));
+            TWeight metrica = 0.0, distanceU = distances[u];
+            if (dest != BAD_TID)
+            {
+                metrica = owner->distance(node, dest);
+                if ((source != BAD_TID) && (distanceU > 0))
+                {
+                    double mback = owner->distance(node, source);
+                    if (mback > 0)
+                    {
+                        metrica *= distanceU / owner->distance(node, source);
+                    }
+                }
+            }
+            owner->nnodes[u].metrica = distanceU + metrica;
+            D.insert(std::make_pair(distanceU + metrica, u));
 //            qDebug() << u << ": " << distances[u];
         }
     }
@@ -182,6 +197,64 @@ void TRouteDijkstra::buildRoute(TOSMWidget::TRoute &route, TID start, TDistanceM
 }
 
 TOSMWidget::TRoute TRouteDijkstra::findPath(TID nodeIdFrom, TID nodeIdTo, TRouteProfile & profile)
+{
+    if (owner->useMetric)
+    {
+        return findPath_AStar(nodeIdFrom, nodeIdTo, profile);
+    }
+    else
+    {
+        return findPath_DDijkstra(nodeIdFrom, nodeIdTo, profile);
+    }
+}
+
+TOSMWidget::TRoute TRouteDijkstra::findPath_AStar(TID nodeIdFrom, TID nodeIdTo, TRouteProfile & profile)
+{
+    TDistanceMap distancesFrom, distancesTo;
+    TSortedDistances Dfrom, Dto;
+    TIDs Ufrom, Uto;
+    initSearch(nodeIdFrom, profile, distancesFrom, Dfrom, nodeIdTo);
+    initSearch(nodeIdTo, profile, distancesTo, Dto, nodeIdFrom);
+    for (TDistanceMap::Iterator it = distancesTo.begin(); it != distancesTo.end(); it++)
+    {
+        Uto.insert(it.key());
+    }
+    TID contactKnot = BAD_TID;
+    while ((Dto.size() > 0) && (Dfrom.size() > 0))
+    {
+        TID v = getNextKnot(Dfrom, Ufrom);
+        if (v == BAD_TID) break;
+        if (Uto.contains(v))
+        {
+            contactKnot = v;
+            break;
+        }
+        updateDistances(v, distancesFrom, Dfrom, profile, false, nodeIdTo);
+//        v = getNextKnot(Dto, Uto);
+//        if (v == BAD_TID) break;
+//        if (Ufrom.contains(v))
+//        {
+//            contactKnot = v;
+//            break;
+//        }
+//        updateDistances(v, distancesTo, Dto, profile, true, nodeIdFrom);
+    }
+    TOSMWidget::TRoute route;
+    if (contactKnot == BAD_TID)
+    {
+        qDebug() << "No way!";
+    }
+    else
+    {
+        qDebug() << "Way!";
+        route.nodes.append(contactKnot);
+        buildRoute(route, contactKnot, distancesFrom, profile);
+        buildRoute(route, contactKnot, distancesTo, profile, true);
+    }
+    return route;
+}
+
+TOSMWidget::TRoute TRouteDijkstra::findPath_DDijkstra(TID nodeIdFrom, TID nodeIdTo, TRouteProfile & profile)
 {
     TDistanceMap distancesFrom, distancesTo;
     TSortedDistances Dfrom, Dto;

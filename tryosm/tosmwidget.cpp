@@ -656,7 +656,7 @@ void TOSMWidget::paintEvent(QPaintEvent *)
 //            double dist = std::min(dist1 + wdist, dist2 + wlen - wdist);
 //            Painter.setPen(QPen(QColor(long((dist*256/10)) % 256, 128, 128)));
             QPointF curP = nnodes[*it_n].toPointF();
-
+//            Painter.drawText(w2s_p(curP),QString::number(nnodes[*it_n].metrica));
             if (!first)
             {
                 drawLine(Painter, QLineF(prevP, curP));
