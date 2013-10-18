@@ -225,6 +225,7 @@ public:
                                      TID nodeTo
                                      ) = 0;
         virtual TWeight getNodeWeight(TNNode *node, TID wayFrom, TID wayTo) = 0;
+        virtual TWeight getMaxWaySpeed() = 0;
     };
 
     TRouteProfile * routeProfile;

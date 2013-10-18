@@ -62,6 +62,16 @@ TOSMWidget::TWeight TCarProfile::getNodeWeight(TOSMWidget::TNNode *node, TOSMWid
     return 0;
 }
 
+TOSMWidget::TWeight TPedestrianProfile::getMaxWaySpeed()
+{
+    return 6.0;
+}
+
+TOSMWidget::TWeight TCarProfile::getMaxWaySpeed()
+{
+    return 110.0;
+}
+
 bool TCarProfile::isPassable(TOSMWidget::TNWay *way, TOSMWidget::TID nodeFrom, TOSMWidget::TID nodeTo)
 {
     switch (way->roadClass)

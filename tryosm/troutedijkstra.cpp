@@ -52,6 +52,7 @@ void TRouteDijkstra::initSearch(TID nodeId,
     for (TIDs::Iterator it = knots.begin(); it != knots.end(); it++)
     {
         distances.insert(*it, W_INF);
+        owner->nnodes[*it].metrica = W_INF;
     }
     if (owner->nnodes[nodeId].isKnot())
     {
@@ -130,7 +131,7 @@ void TRouteDijkstra::updateDistances(TID node, TDistanceMap &distances, TSortedD
             TWeight metrica = 0.0, distanceU = distances[u];
             if (dest != BAD_TID)
             {
-                metrica = owner->distance(node, dest);
+                metrica = owner->distance(node, dest)/110;
                 if ((source != BAD_TID) && (distanceU > 0))
                 {
                     double mback = owner->distance(node, source);
@@ -210,6 +211,7 @@ TOSMWidget::TRoute TRouteDijkstra::findPath(TID nodeIdFrom, TID nodeIdTo, TRoute
 
 TOSMWidget::TRoute TRouteDijkstra::findPath_AStar(TID nodeIdFrom, TID nodeIdTo, TRouteProfile & profile)
 {
+    qDebug() << "routing with A*";
     TDistanceMap distancesFrom, distancesTo;
     TSortedDistances Dfrom, Dto;
     TIDs Ufrom, Uto;
@@ -256,6 +258,7 @@ TOSMWidget::TRoute TRouteDijkstra::findPath_AStar(TID nodeIdFrom, TID nodeIdTo, 
 
 TOSMWidget::TRoute TRouteDijkstra::findPath_DDijkstra(TID nodeIdFrom, TID nodeIdTo, TRouteProfile & profile)
 {
+    qDebug() << "routing with Double Dijkstra";
     TDistanceMap distancesFrom, distancesTo;
     TSortedDistances Dfrom, Dto;
     TIDs Ufrom, Uto;
