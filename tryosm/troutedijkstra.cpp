@@ -215,9 +215,9 @@ TOSMWidget::TRoute TRouteDijkstra::findPath_AStar(TID nodeIdFrom, TID nodeIdTo, 
     TIDs Ufrom, Uto;
     initSearch(nodeIdFrom, profile, distancesFrom, Dfrom, nodeIdTo);
     initSearch(nodeIdTo, profile, distancesTo, Dto, nodeIdFrom);
-    for (TDistanceMap::Iterator it = distancesTo.begin(); it != distancesTo.end(); it++)
+    for (TSortedDistances::iterator it = Dto.begin(); it != Dto.end(); it++)
     {
-        Uto.insert(it.key());
+        Uto.insert(it->second);
     }
     TID contactKnot = BAD_TID;
     while ((Dto.size() > 0) && (Dfrom.size() > 0))
