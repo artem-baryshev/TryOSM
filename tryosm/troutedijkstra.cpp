@@ -131,15 +131,19 @@ void TRouteDijkstra::updateDistances(TID node, TDistanceMap &distances, TSortedD
             TWeight metrica = 0.0, distanceU = distances[u];
             if (dest != BAD_TID)
             {
-                metrica = owner->distance(node, dest)/110;
+                metrica = owner->distance(u, dest)/profile.getMaxWaySpeed();
                 if ((source != BAD_TID) && (distanceU > 0))
                 {
-                    double mback = owner->distance(node, source);
+                    double mback = owner->distance(u, source)/profile.getMaxWaySpeed();
                     if (mback > 0)
                     {
-                        metrica *= distanceU / owner->distance(node, source);
+                        metrica *= distanceU / mback;
                     }
                 }
+//                if (rand() % 1000 == 1)
+//                {
+//                    qDebug() << "distance " << distanceU << "; metrica " << metrica;
+//                }
             }
             owner->nnodes[u].metrica = distanceU + metrica;
             D.insert(std::make_pair(distanceU + metrica, u));
@@ -248,7 +252,7 @@ TOSMWidget::TRoute TRouteDijkstra::findPath_AStar(TID nodeIdFrom, TID nodeIdTo, 
     }
     else
     {
-        qDebug() << "Way!";
+        qDebug() << "Way! " << distancesFrom[contactKnot] << "; strait way " << owner->distance(nodeIdFrom, nodeIdTo);
         route.nodes.append(contactKnot);
         buildRoute(route, contactKnot, distancesFrom, profile);
         buildRoute(route, contactKnot, distancesTo, profile, true);

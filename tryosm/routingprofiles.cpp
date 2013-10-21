@@ -18,7 +18,7 @@ TOSMWidget::TWeight TPedestrianProfile::getWayWeight(TOSMWidget::TNWay *way, TOS
         case TOSMWidget::TNWay::EW_Raceway:
         case TOSMWidget::TNWay::EW_Road:
         case TOSMWidget::TNWay::EW_BusGuideway:
-        case TOSMWidget::TNWay::EW_Construction:  spd = 4; break;
+        case TOSMWidget::TNWay::EW_Construction:  spd = 6; break;
         default: spd = 6;
     }
     return way->getLength(nodeFrom, nodeTo)/spd;

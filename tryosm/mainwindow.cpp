@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //    osm = new TOSMWidget("/home/arxaoc/ArxOsm5.sqlite", this);
 //    osm = new TOSMWidget("/media/arxaoc/A701/russia.highway.sqlite", this);
     ui->verticalLayout->addWidget(osm);
-    osm->routeProfile = new TCarProfile;
+    osm->routeProfile = new TPedestrianProfile;
 
 }
 
