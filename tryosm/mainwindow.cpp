@@ -5,6 +5,7 @@
 #include <QDebug>
 #include "tosmtosqlite.h"
 #include "routingprofiles.h"
+#include "pointers.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),

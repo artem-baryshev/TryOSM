@@ -27,6 +27,7 @@ HEADERS  += mainwindow.h \
     tstat.h \
     tmouseman.h \
     troutedijkstra.h \
-    routingprofiles.h
+    routingprofiles.h \
+    pointers.h
 
 FORMS    += mainwindow.ui

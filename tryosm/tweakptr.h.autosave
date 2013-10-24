@@ -1,0 +1,14 @@
+#ifndef TWEAKPTR_H
+#define TWEAKPTR_H
+
+template <class T>
+class TShared
+
+template <class T>
+class TWeakPtr
+{
+public:
+    TWeakPtr();
+};
+
+#endif // TWEAKPTR_H

@@ -51,9 +51,10 @@ TOSMWidget::TWayFlag::TWayFlag(bool f, bool r)
 void TOSMWidget::TNWay::init()
 {
     length = NULL;
-    roadClass = EW_Unclassified;
-    isLink = false;
-    oneWay = OW_no;
+    road_class = EW_Unclassified;
+    is_link = false;
+    one_way = OW_no;
+    is_area = false;
 //    attr = TOSMWidget::TWayWeight(0, 0);
 //    usage = TOSMWidget::TWayWeight(0, 0);
 //    passable = TOSMWidget::TWayFlag(true, true);
@@ -261,46 +262,61 @@ void TOSMWidget::loadNData(QString DbFileName)
             if (!nways.contains(w)) nways.insert(w, TNWay(this));
             TNWay * way = &(nways[w]);
 
-            if (v == "motorway") { way->roadClass = TNWay::EW_Motorway; }
-            if (v == "motorway_link") { way->roadClass = TNWay::EW_Motorway; way->isLink = true;}
-            if (v == "trunk") { way->roadClass = TNWay::EW_Trunk; }
-            if (v == "trunk_link") { way->roadClass = TNWay::EW_Trunk; way->isLink = true;}
-            if (v == "primary") { way->roadClass = TNWay::EW_Primary; }
-            if (v == "primary_link") { way->roadClass = TNWay::EW_Primary; way->isLink = true;}
-            if (v == "secondary") { way->roadClass = TNWay::EW_Secondary; }
-            if (v == "secondary_link") { way->roadClass = TNWay::EW_Secondary; way->isLink = true;}
-            if (v == "tertiary") { way->roadClass = TNWay::EW_Tertiary; }
-            if (v == "tertiary_link") { way->roadClass = TNWay::EW_Tertiary; way->isLink = true;}
-            if (v == "living_street") { way->roadClass = TNWay::EW_LivingStreet; }
-            if (v == "pedestrian") { way->roadClass = TNWay::EW_Pedestrian; }
-            if (v == "residential") { way->roadClass = TNWay::EW_Residental; }
-            if (v == "unclassified") { way->roadClass = TNWay::EW_Unclassified; }
-            if (v == "service") { way->roadClass = TNWay::EW_Service; }
-            if (v == "track") { way->roadClass = TNWay::EW_Track; }
-            if (v == "bus_guideway") { way->roadClass = TNWay::EW_BusGuideway; }
-            if (v == "raceway") { way->roadClass = TNWay::EW_Raceway; }
-            if (v == "road") { way->roadClass = TNWay::EW_Road; }
-            if (v == "path") { way->roadClass = TNWay::EW_Path; }
-            if (v == "footway") { way->roadClass = TNWay::EW_Footway; }
-            if (v == "bridleway") { way->roadClass = TNWay::EW_Bridleway; }
-            if (v == "steps") { way->roadClass = TNWay::EW_Steps; }
-            if (v == "cycleway") { way->roadClass = TNWay::EW_Cycleway; }
-            if (v == "proposed") { way->roadClass = TNWay::EW_Proposed; }
-            if (v == "construction") { way->roadClass = TNWay::EW_Construction; }
-            if (v == "escape") { way->roadClass = TNWay::EW_Escape; }
+            if (v == "motorway") { way->setRoadClass(TNWay::EW_Motorway); }
+            if (v == "motorway_link") { way->setRoadClass(TNWay::EW_Motorway); way->setIsLink(true);}
+            if (v == "trunk") { way->setRoadClass(TNWay::EW_Trunk); }
+            if (v == "trunk_link") { way->setRoadClass(TNWay::EW_Trunk); way->setIsLink(true);}
+            if (v == "primary") { way->setRoadClass(TNWay::EW_Primary); }
+            if (v == "primary_link") { way->setRoadClass(TNWay::EW_Primary); way->setIsLink(true);}
+            if (v == "secondary") { way->setRoadClass(TNWay::EW_Secondary); }
+            if (v == "secondary_link") { way->setRoadClass(TNWay::EW_Secondary); way->setIsLink(true);}
+            if (v == "tertiary") { way->setRoadClass(TNWay::EW_Tertiary); }
+            if (v == "tertiary_link") { way->setRoadClass(TNWay::EW_Tertiary); way->setIsLink(true);}
+            if (v == "living_street") { way->setRoadClass(TNWay::EW_LivingStreet); }
+            if (v == "pedestrian") { way->setRoadClass(TNWay::EW_Pedestrian); }
+            if (v == "residential") { way->setRoadClass(TNWay::EW_Residental); }
+            if (v == "unclassified") { way->setRoadClass(TNWay::EW_Unclassified); }
+            if (v == "service") { way->setRoadClass(TNWay::EW_Service); }
+            if (v == "track") { way->setRoadClass(TNWay::EW_Track); }
+            if (v == "bus_guideway") { way->setRoadClass(TNWay::EW_BusGuideway); }
+            if (v == "raceway") { way->setRoadClass(TNWay::EW_Raceway); }
+            if (v == "road") { way->setRoadClass(TNWay::EW_Road); }
+            if (v == "path") { way->setRoadClass(TNWay::EW_Path); }
+            if (v == "footway") { way->setRoadClass(TNWay::EW_Footway); }
+            if (v == "bridleway") { way->setRoadClass(TNWay::EW_Bridleway); }
+            if (v == "steps") { way->setRoadClass(TNWay::EW_Steps); }
+            if (v == "cycleway") { way->setRoadClass(TNWay::EW_Cycleway); }
+            if (v == "proposed") { way->setRoadClass(TNWay::EW_Proposed); }
+            if (v == "construction") { way->setRoadClass(TNWay::EW_Construction); }
+            if (v == "escape") { way->setRoadClass(TNWay::EW_Escape); }
             if (t == "oneway")
             {
                 if ((v == "yes") || (v == "true") || (v == "true"))
                 {
-                    way->oneWay = TNWay::OW_yes_forward;
+                    way->setOneWay(TNWay::OW_yes_forward);
                 }
                 if ((v == "-1") || (v == "reverse"))
                 {
-                    way->oneWay = TNWay::OW_yes_reverce;
+                    way->setOneWay(TNWay::OW_yes_reverce);
                 }
                 if (v == "no")
                 {
-                    way->oneWay = TNWay::OW_no;
+                    way->setOneWay(TNWay::OW_no);
+                }
+            }
+            if (t == "area")
+            {
+                if ((v == "yes") || (v == "true") || (v == "true"))
+                {
+                    way->setIsArea(true);
+                }
+                if ((v == "-1") || (v == "reverse"))
+                {
+                    way->setIsArea(true);
+                }
+                if (v == "no")
+                {
+                    way->setIsArea(false);
                 }
             }
         }
@@ -624,7 +640,7 @@ void TOSMWidget::paintEvent(QPaintEvent *)
 //                wdist = 0.0;
         i++;
 //        Painter.setPen(QPen(QColor((i*i)%200, ((i+11)*(i+11))%200, ((i+19)*(i+19))%200)));
-        switch (way->roadClass)
+        switch (way->roadClass())
         {
             case TOSMWidget::TNWay::EW_Trunk:
             case TOSMWidget::TNWay::EW_Motorway:
@@ -837,9 +853,9 @@ TOSMWidget::TWeight TOSMWidget::TNWay::getLength(TID fromNode, TID toNode)
     }
     if (lengthes.contains(toNode))
     {
-        if (lengthes[toNode].contains(toNode))
+        if (lengthes[toNode].contains(fromNode))
         {
-            return lengthes[toNode][toNode];
+            return lengthes[toNode][fromNode];
         }
     }
     TWeight w = 0;
@@ -847,30 +863,48 @@ TOSMWidget::TWeight TOSMWidget::TNWay::getLength(TID fromNode, TID toNode)
     TWayFlag calc(false, false);
     if (fromNode == toNode) return 0.0;
     bool has1 = false, has2 = false;
-    for (int i = 0; i < nodes.size(); i++)
+    if (isArea())
     {
-        if (nodes[i] == fromNode)
+        for (QList <TID>::iterator it = nodes.begin(); it != nodes.end(); ++it)
         {
-            has1 = true;
-            calc.forward = true;
-            if (!calc.reverce)
+            if ((*it) == fromNode)
             {
-                d = Forward;
-                continue;
+                has1 = true;
+            }
+            if ((*it) == toNode)
+            {
+                has2 = true;
             }
         }
-        if (nodes[i] == toNode)
+        w = owner->distance(fromNode, toNode);
+    }
+    else
+    {
+        for (int i = 0; i < nodes.size(); i++)
         {
-            has2 = true;
-            calc.reverce = true;
-            if (!calc.forward)
+            if (nodes[i] == fromNode)
             {
-                d = Reverce;
-                continue;
+                has1 = true;
+                calc.forward = true;
+                if (!calc.reverce)
+                {
+                    d = Forward;
+                    continue;
+                }
             }
+            if (nodes[i] == toNode)
+            {
+                has2 = true;
+                calc.reverce = true;
+                if (!calc.forward)
+                {
+                    d = Reverce;
+                    continue;
+                }
+            }
+            if (calc.forward || calc.reverce) w += owner->distance(nodes[i], nodes[i-1]);
+            if (calc.forward && calc.reverce) break;
         }
-        if (calc.forward || calc.reverce) w += owner->distance(nodes[i], nodes[i-1]);
-        if (calc.forward && calc.reverce) break;
     }
     if (!(has1 && has2))
     {

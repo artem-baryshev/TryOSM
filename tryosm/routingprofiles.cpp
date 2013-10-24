@@ -3,7 +3,7 @@
 TOSMWidget::TWeight TPedestrianProfile::getWayWeight(TOSMWidget::TNWay *way, TOSMWidget::TID nodeFrom, TOSMWidget::TID nodeTo)
 {
     TOSMWidget::TWeight spd = 6;
-    switch(way->roadClass)
+    switch(way->roadClass())
     {
         case TOSMWidget::TNWay::EW_Motorway:
         case TOSMWidget::TNWay::EW_Trunk:
@@ -38,7 +38,7 @@ TOSMWidget::TWeight TCarProfile::getWayWeight(TOSMWidget::TNWay *way, TOSMWidget
 {
     if (!isPassable(way, nodeFrom, nodeTo)) return W_INF;
     TOSMWidget::TWeight spd;
-    switch(way->roadClass)
+    switch(way->roadClass())
     {
         case TOSMWidget::TNWay::EW_Motorway: spd = 110; break;
         case TOSMWidget::TNWay::EW_Trunk: spd = 70; break;
@@ -74,7 +74,7 @@ TOSMWidget::TWeight TCarProfile::getMaxWaySpeed()
 
 bool TCarProfile::isPassable(TOSMWidget::TNWay *way, TOSMWidget::TID nodeFrom, TOSMWidget::TID nodeTo)
 {
-    switch (way->roadClass)
+    switch (way->roadClass())
     {
         case TOSMWidget::TNWay::EW_Pedestrian: return false;
         case TOSMWidget::TNWay::EW_BusGuideway: return false;
@@ -87,7 +87,7 @@ bool TCarProfile::isPassable(TOSMWidget::TNWay *way, TOSMWidget::TID nodeFrom, T
         case TOSMWidget::TNWay::EW_Construction: return false;
         default:;
     }
-    switch (way->oneWay)
+    switch (way->oneWay())
     {
     case TOSMWidget::TNWay::OW_no: return true;
     case TOSMWidget::TNWay::OW_yes_forward: return (way->getNodeIndex(nodeFrom) <= way->getNodeIndex(nodeTo));

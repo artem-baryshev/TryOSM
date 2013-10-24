@@ -15,6 +15,7 @@
 #include <QReadWriteLock>
 #include "tstat.h"
 #include "tmouseman.h"
+#include "pointers.h"
 
 const long long BAD_TID = -1;
 const double W_INF = 1e100;
@@ -79,6 +80,8 @@ public:
 
     struct TNNode
     {
+        TWeakPtr <TOSMWidget> owner;
+//        TOSMWidget * owner;
 //        long usage;
         double lat, lon, metrica;
 //        double attr, usefullness, matter;
@@ -88,7 +91,8 @@ public:
         TNNode(double Lat = 0, double Lon = 0);
         bool isKnot()
         {
-            return (ownedBy.size() > 1);
+            if (ownedBy.size() > 1) return true;
+//            TNWay *way = owner->nways[*ownedBy.begin()];
         }
     };
 
@@ -135,9 +139,9 @@ public:
         public:
             exception(QString S){qDebug() << S;}
         };
-        EWayClass roadClass;
-        EOneway oneWay;
-        bool isLink;
+
+
+
 
         QMap <TID, QMap <TID, TWeight> > lengthes;
 
@@ -156,7 +160,19 @@ public:
         TID getOtherEnd(TID);
         EDirection getDirectionFrom(TID);
         ~TNWay();
+        inline void setIsArea(bool v) {is_area = v;}
+        inline void setIsLink(bool v) {is_link = v;}
+        inline void setOneWay(EOneway v) {one_way = v;}
+        inline void setRoadClass(EWayClass v) {road_class = v;}
+        inline bool isArea() const {return is_area;}
+        inline bool isLink() const {return is_link;}
+        inline EOneway oneWay() const {return one_way;}
+        inline EWayClass roadClass() const {return road_class;}
     private:
+        bool is_area;
+        bool is_link;
+        EOneway one_way;
+        EWayClass road_class;
         TOSMWidget * owner;
         TWeight *length;
 //        TWeight *weight;
