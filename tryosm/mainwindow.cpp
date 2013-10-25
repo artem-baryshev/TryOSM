@@ -16,8 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 //    TOsmToSqlite tosm("/home/arxaoc/RU-SVE.osm", "/home/arxaoc/ArxOsm5.sqlite", true);
 //    exit(0);
-    osm = new TOSMWidget("C:\\temp\\ArxOsm5.sqlite", this);
-//    osm = new TOSMWidget("/home/arxaoc/ArxOsm5.sqlite", this);
+//    osm = new TOSMWidget("C:\\temp\\ArxOsm5.sqlite", this);
+    osm = new TOSMWidget("/home/arxaoc/ArxOsm5.sqlite", this);
 //    osm = new TOSMWidget("/media/arxaoc/A701/russia.highway.sqlite", this);
     ui->verticalLayout->addWidget(osm);
     osm->routeProfile = new TPedestrianProfile;

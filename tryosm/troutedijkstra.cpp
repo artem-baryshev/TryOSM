@@ -23,25 +23,38 @@ TRouteDijkstra::TRouteDijkstra(TOSMWidget * Owner) : TOSMWidget::TRoutingEngine:
         TOSMWidget::TNWay * way = &(it.value());
         if (way->isArea())
         {
-//            size_t n = way->nodes.size() - 1;
-//            for (size_t i = 0; i <= n; ++i)
-//            {
-//                for (size_t j = 0; j <= n; ++j)
-//                {
-////                    bool crossed =
-//                    if (abs(i - j) <= 1) continue;
-//                    if (abs(n-i) + abs(j) <= 1) continue;
-//                    if (abs(n-j) + abs(i) <= 1) continue;
-//                    for (size_t k = 1; k <= n; ++k)
-//                    {
-//                        if (linesCrossed(owner->nnodes[way->nodes[i]].toPointF()))
-//                        {
-//                            break;
-//                        }
-//                    }
-//                    nearKnots(way->nodes[i], way->nodes[j], it.key());
-//                }
-//            }
+            size_t n = way->nodes.size() - 1;
+            for (size_t i = 0; i <= n; ++i)
+            {
+                for (size_t j = 0; j <= n; ++j)
+                {
+                    bool available = false;
+                    if (abs(static_cast<long>(i - j)) <= 1) available = true;
+                    if (abs(static_cast<long>(n-i)) + abs(static_cast<long>(j)) <= 1) available = true;
+                    if (abs(static_cast<long>(n-j)) + abs(static_cast<long>(i)) <= 1) available = true;
+                    if (!available)
+                    {
+                        available = true;
+                        for (size_t k = 1; (k <= n); ++k)
+                        {
+                            if (linesCrossed(owner->nnodes[way->nodes[i]].toPointF(),
+                                             owner->nnodes[way->nodes[j]].toPointF(),
+                                             owner->nnodes[way->nodes[k]].toPointF(),
+                                             owner->nnodes[way->nodes[k-1]].toPointF()
+                                            )
+                                )
+                            {
+                                available = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (available)
+                    {
+                        nearKnots(way->nodes[i], way->nodes[j], it.key());
+                    }
+                }
+            }
         }
         else
         {

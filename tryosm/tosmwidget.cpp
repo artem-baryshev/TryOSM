@@ -590,6 +590,7 @@ double TOSMWidget::distance(TID n1, TID n2)
 
 void TOSMWidget::paintEvent(QPaintEvent *)
 {
+    qDebug() << "Paint event";
     QImage newImage(QSize(rect().width(), rect().height()), QImage::Format_ARGB32);
     QPainter Painter(&newImage);
 //    Painter.set
@@ -727,6 +728,10 @@ void TOSMWidget::paintEvent(QPaintEvent *)
 //    Painter.end();
 
     QPainter newPainter(this);
+    qDebug() << "rect " << this->rect();
+    newPainter.drawRect(this->rect());
+//    qDebug() << "rect " << this->rect();
+//    newPainter.fillRect(this->Rect, QBrush(Qt::white));
     newPainter.drawImage(QPoint(0,0), newImage);
 
 }

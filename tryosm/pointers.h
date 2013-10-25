@@ -109,7 +109,7 @@ template <class T>
 class TWeakPtr
 {
 public:
-    TWeakPtr(T *pointer)
+    TWeakPtr(T *pointer = NULL)
     {
         ptr = pointer;
     }
