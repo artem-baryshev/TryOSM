@@ -91,8 +91,7 @@ public:
         TNNode(double Lat = 0, double Lon = 0);
         bool isKnot()
         {
-            if (ownedBy.size() > 1) return true;
-//            TNWay *way = owner->nways[*ownedBy.begin()];
+            return ownedBy.size() > 1;
         }
     };
 

@@ -1,20 +1,59 @@
 #include "troutedijkstra.h"
 #include <map>
 
+double vectMult(QPointF v1, QPointF v2)
+{
+    return v1.x() * v2.y() - v1.y() * v2.x();
+}
+
+bool linesCrossed(QPointF p11, QPointF p12, QPointF p21, QPointF p22)
+{
+    double v1 = vectMult(QPointF(p22.x() - p21.x(), p22.y() - p21.y()), QPointF(p11.x() - p21.x(), p11.y() - p21.y()));
+    double v2 = vectMult(QPointF(p22.x() - p21.x(), p22.y() - p21.y()), QPointF(p12.x() - p21.x(), p12.y() - p21.y()));
+    double v3 = vectMult(QPointF(p12.x() - p11.x(), p12.y() - p11.y()), QPointF(p21.x() - p11.x(), p21.y() - p11.y()));
+    double v4 = vectMult(QPointF(p12.x() - p11.x(), p12.y() - p11.y()), QPointF(p22.x() - p11.x(), p22.y() - p11.y()));
+    return ((v1 * v2) < 0) && ((v3 * v4) < 0);
+}
+
 TRouteDijkstra::TRouteDijkstra(TOSMWidget * Owner) : TOSMWidget::TRoutingEngine::TRoutingEngine(Owner)
 {
     for (TOSMWidget::TNWays::Iterator it = Owner->nways.begin(); it != Owner->nways.end(); it++)
     {
         TID preNodeId = BAD_TID;
         TOSMWidget::TNWay * way = &(it.value());
-        for (TOSMWidget::TIDList::Iterator it_n = way->nodes.begin(); it_n != way->nodes.end(); it_n++)
+        if (way->isArea())
         {
-            TID nodeId = *it_n;
-            if (Owner->nnodes[nodeId].isKnot())
+//            size_t n = way->nodes.size() - 1;
+//            for (size_t i = 0; i <= n; ++i)
+//            {
+//                for (size_t j = 0; j <= n; ++j)
+//                {
+////                    bool crossed =
+//                    if (abs(i - j) <= 1) continue;
+//                    if (abs(n-i) + abs(j) <= 1) continue;
+//                    if (abs(n-j) + abs(i) <= 1) continue;
+//                    for (size_t k = 1; k <= n; ++k)
+//                    {
+//                        if (linesCrossed(owner->nnodes[way->nodes[i]].toPointF()))
+//                        {
+//                            break;
+//                        }
+//                    }
+//                    nearKnots(way->nodes[i], way->nodes[j], it.key());
+//                }
+//            }
+        }
+        else
+        {
+            for (TOSMWidget::TIDList::Iterator it_n = way->nodes.begin(); it_n != way->nodes.end(); it_n++)
             {
-                if (preNodeId != BAD_TID) nearKnots(preNodeId, nodeId, it.key());
-                knots.insert(nodeId);
-                preNodeId = nodeId;
+                TID nodeId = *it_n;
+                if (Owner->nnodes[nodeId].isKnot())
+                {
+                    if (preNodeId != BAD_TID) nearKnots(preNodeId, nodeId, it.key());
+                    knots.insert(nodeId);
+                    preNodeId = nodeId;
+                }
             }
         }
     }
